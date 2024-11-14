@@ -1,8 +1,8 @@
 ---
 fixes:
   - |
-    Adjusts the documented permissions for the images pool for the cinder user.
-    This is to support copy on write snaphots of vms using ceph backed
+    Adjusts the documented permissions for the images pool for the Cinder user.
+    This is to support copy on write snapshots of VMs using Ceph backed
     ephemeral storage. Existing deployments will need to manually adjust these
     values using the CLI (the collection is currently not smart enough to do this):
     ``ceph auth caps client.cinder mon 'profile rbd' osd 'profile rbd
