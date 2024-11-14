@@ -243,7 +243,7 @@ for Cinder, Cinder backup, Glance, and Nova in Kolla Ansible.
      - name: client.cinder
        caps:
          mon: "profile rbd"
-         osd: "profile rbd pool=volumes, profile rbd pool=vms, profile rbd-read-only pool=images"
+         osd: "profile rbd pool=volumes, profile rbd pool=vms, profile rbd pool=images"
          mgr: "profile rbd pool=volumes, profile rbd pool=vms"
      - name: client.cinder-backup
        caps:
