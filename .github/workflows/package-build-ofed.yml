@@ -97,7 +97,7 @@ jobs:
       - name: Generate clouds.yaml
         run: |
           cat << EOF > clouds.yaml
-          ${{ secrets.CLOUDS_YAML_SMS }}
+          ${{ secrets.CLOUDS_YAML }}
           EOF
         working-directory: ${{ github.workspace }}/src/kayobe-config/terraform/aio
 
@@ -134,8 +134,8 @@ jobs:
         working-directory: ${{ github.workspace }}/src/kayobe-config/terraform/aio
         env:
           OS_CLOUD: ${{ vars.OS_CLOUD }}
-          OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID_SMS }}
-          OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET_SMS }}
+          OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+          OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
       - name: Terraform Apply
         run: |
@@ -154,8 +154,8 @@ jobs:
         working-directory: ${{ github.workspace }}/src/kayobe-config/terraform/aio
         env:
           OS_CLOUD: ${{ vars.OS_CLOUD }}
-          OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID_SMS }}
-          OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET_SMS }}
+          OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+          OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
 
       - name: Get Terraform outputs
         id: tf_outputs
@@ -270,6 +270,6 @@ jobs:
         working-directory: ${{ github.workspace }}/src/kayobe-config/terraform/aio
         env:
           OS_CLOUD: openstack
-          OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID_SMS }}
-          OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET_SMS }}
+          OS_APPLICATION_CREDENTIAL_ID: ${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}
+          OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
         if: always()
