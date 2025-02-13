@@ -116,8 +116,7 @@ jobs:
   container-image-build:
     name: Build Kolla container images
     if: github.repository == 'stackhpc/stackhpc-kayobe-config'
-    environment: ${{ inputs.runner_env }}
-    runs-on: ${{ vars.RUNS_ON_TARGET_IMAGE_BUILDER }}
+    runs-on: ${{ needs.runner-selection.outputs.runner_name_container_image_build }}
     timeout-minutes: 720
     permissions: {}
     strategy:

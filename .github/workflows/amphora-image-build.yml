@@ -25,10 +25,17 @@ env:
   KAYOBE_ENVIRONMENT: ci-builder
   KAYOBE_VAULT_PASSWORD: ${{ secrets.KAYOBE_VAULT_PASSWORD }}
 jobs:
+  runner-selection:
+    uses: ./.github/workflows/runner-selector.yml
+    with:
+      runner_env: ${{ inputs.runner_env }}
   amphora-image-build:
     name: Build Amphora image
     if: github.repository == 'stackhpc/stackhpc-kayobe-config'
-    runs-on: arc-skc-host-image-builder-runner
+    environment: ${{ inputs.runner_env }}
+    runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
+    needs:
+      - runner-selection
     permissions: {}
     steps:
 
