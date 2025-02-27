@@ -2,64 +2,22 @@
 Multinode Test Environment
 ==========================
 
-.. warning::
+The ``ci-multinode`` environment provides a Kayobe configuration for multi-node
+clouds to be used for test and development purposes. It is designed to be used
+in combination with the `terraform-kayobe-multinode
+<https://github.com/stackhpc/terraform-kayobe-multinode>`__ repository. Follow
+the instructions in terraform-kayobe-multinode to deploy a cluster using this
+configuration. This documentation covers configuration of additional services
+beyond the defaults. This includes:
 
-    This guide was written for the Yoga release and has not been validated for
-    Antelope. Proceed with caution.
+* Manila
+* Magnum
+* Wazuh
 
+.. seealso::
 
-Set up hosts
-============
-1. Create four baremetal instances with a centos 8 stream LVM image, and a
-   Centos 8 stream vm
-2. SSH into each baremetal and run ``sudo chown -R centos:.`` in the home
-   directory, then add the lines::
-
-      10.0.0.34 pelican pelican.service.compute.sms-lab.cloud
-      10.205.3.187 pulp-server pulp-server.internal.sms-cloud
-
-   to ``/etc/hosts`` (if you're waiting on them starting up, you can progress
-   until ``kayobe overcloud host configure`` without this step)
-
-Basic Kayobe Setup
-==================
-1. SSH into the VM
-2. ``sudo dnf install -y python3-virtualenv``
-3. ``mkdir src`` and ``cd src``
-4. Clone https://github.com/stackhpc/stackhpc-kayobe-config.git, then checkout
-   commit f31df6256f1b1fea99c84547d44f06c4cb74b161
-5. ``cd ..`` and ``mkdir venvs``
-6. ``virtualenv venvs/kayobe`` and source ``venvs/kayobe/bin/activate``
-7. ``pip install -U pip``
-8. ``pip install ./src/kayobe``
-9. Acquire the Ansible Vault password for this repository, and store a copy at
-   ``~/vault-pw``
-10. ``export KAYOBE_VAULT_PASSWORD=$(cat ~/vault-pw)``
-
-Config changes
-==============
-1. In etc/kayobe/ansible/requirements.yml remove version from vxlan
-2. In etc/kayobe/ansible/configure-vxlan.yml, change the group of
-   vxlan_interfaces so that the last octet is different e.g. 224.0.0.15
-3. Also under vxlan_interfaces, add vni:x where x is between 500 and 1000
-4. Also under vxlan_interfaces, check vxlan_dstport is not 4789 (this causes
-   conflicts, change to 4790)
-5. In etc/kayobe/environments/ci-multinode/tf-networks.yml, edit admin_ips so
-   that the compute and controller IPs line up with the
-   instances that were created earlier, remove the other IPs for seed and
-   cephOSD
-6. In etc/kayobe/environments/ci-multinode/network-allocation.yml, remove all
-   the entries and just assign ``aio_ips:`` an empty set ``[]``
-7. In etc/kayobe/environments/ci-multinode/inventory/hosts, remove the seed
-8. run stackhpc-kayobe-config/etc/kayobe/ansible/growroot.yml (if this fails,
-   manually increase the partition size on each host)
-
-Final steps
-===========
-1. ``source kayobe-env --environment ci-aio``
-2. Run ``kayobe overcloud host configure``
-3. Run ``kayobe overcloud service deploy``
-
+   On-demand and nightly GitHub Actions workflows workflow using this
+   environment are described :ref:`here <testing-multinode>`.
 
 Manila
 ======
@@ -72,8 +30,15 @@ is not enabled by default. To enable it, set the following in
       kolla_enable_manila: true
       kolla_enable_manila_backend_cephfs_native: true
 
-And re-run ``kayobe overcloud service deploy`` if you are working on an existing
-deployment.
+If you are working on an existing deployment, you need to do the following first.
+
+1. Create CephFS pools: ``kayobe playbook run $KAYOBE_CONFIG_PATH/ansible/cephadm-pools.yml``
+2. Create cephx key for Manila: ``kayobe playbook run $KAYOBE_CONFIG_PATH/ansible/cephadm-keys.yml``
+3. Run Manila related Ceph commands: ``kayobe playbook run $KAYOBE_CONFIG_PATH/ansible/cephadm-commands-post.yml``
+4. Gather Ceph configuration and keyring for Manila: ``kayobe playbook run $KAYOBE_CONFIG_PATH/ansible/cephadm-gather-keys.yml``
+5. Configure Storage network on Seed node: ``kayobe seed host configure -t network,ip-allocation,snat``
+
+Then, run ``kayobe overcloud service deploy`` to deploy Manila.
 
 To test it, you will need two virtual machines. Cirros does not support the Ceph
 kernel client, so you will need to use a different image. Any regular Linux
@@ -145,35 +110,35 @@ Then create a share type and share:
 
 .. code-block:: bash
 
-      manila type-create cephfs-type false --is_public true
-      manila type-key cephfs-type set vendor_name=Ceph storage_protocol=CEPHFS
-      manila create --name test-share --share-type cephfs-type CephFS 2
+      openstack share type create cephfs-type false --public true
+      openstack share type set cephfs-type --extra-specs vendor_name=Ceph, storage_protocol=CEPHFS
+      openstack share create --name test-share --share-type cephfs-type --public true CephFS 2
 
 Wait until the share is available:
 
 .. code-block:: bash
 
-      manila list
+      openstack share list
 
 Then allow access to the shares to two users:
 
 .. code-block:: bash
 
-      manila access-allow test-share cephx alice
-      manila access-allow test-share cephx bob
+      openstack share access create test-share cephx alice
+      openstack share access create test-share cephx bob
 
 Show the access list to make sure the state of both entries is ``active`` and
 take note of the access keys:
 
 .. code-block:: bash
 
-      manila access-list test-share
+      openstack share access list test-share
 
 And take note of the path to the share:
 
 .. code-block:: bash
 
-      manila share-export-location-list test-share
+      openstack share export location list test-share
 
 SSH into the first instance, create a directory for the share, and mount it:
 

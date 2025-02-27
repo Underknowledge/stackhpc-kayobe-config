@@ -35,7 +35,7 @@ variable "aio_vm_subnet" {
 
 variable "aio_vm_volume_size" {
   type = number
-  default = 35
+  default = 50
 }
 
 variable "aio_vm_tags" {
