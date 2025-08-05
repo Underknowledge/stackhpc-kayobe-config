@@ -14,6 +14,7 @@ the various features provided.
    cephadm
    monitoring
    openbao
+   vault
    wazuh
    walled-garden
    security-hardening

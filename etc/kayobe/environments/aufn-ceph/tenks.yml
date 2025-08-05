@@ -9,7 +9,7 @@ node_types:
     volumes:
       # There is a minimum disk space capacity requirement of 4GiB when using Ironic Python Agent:
       # https://github.com/openstack/ironic-python-agent/blob/master/ironic_python_agent/utils.py#L290
-      - capacity: 22GiB
+      - capacity: 20GiB
     physical_networks:
       - provision-net
       - mgmt-net
@@ -21,10 +21,9 @@ node_types:
     volumes:
       # There is a minimum disk space capacity requirement of 4GiB when using Ironic Python Agent:
       # https://github.com/openstack/ironic-python-agent/blob/master/ironic_python_agent/utils.py#L290
-      - capacity: 22GiB
+      - capacity: 15GiB
       # Ceph volume
-      # Must be larger than main disk, since Ceph will take the largest volume it can find
-      - capacity: 23GiB
+      - capacity: 20GiB
     physical_networks:
       - provision-net
       - cloud-net
@@ -35,7 +34,7 @@ node_types:
     volumes:
       # There is a minimum disk space capacity requirement of 4GiB when using Ironic Python Agent:
       # https://github.com/openstack/ironic-python-agent/blob/master/ironic_python_agent/utils.py#L290
-      - capacity: 22GiB
+      - capacity: 15GiB
     physical_networks:
       - provision-net
       - cloud-net
