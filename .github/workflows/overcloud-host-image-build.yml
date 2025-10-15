@@ -37,31 +37,17 @@ jobs:
     uses: ./.github/workflows/runner-selector.yml
     with:
       runner_env: ${{ inputs.runner_env }}
-  overcloud-host-image-build:
-    name: Build overcloud host images
+  create-tag:
+    name: Create a tag to be added to resulting images
     if: github.repository == 'stackhpc/stackhpc-kayobe-config'
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
       - runner-selection
     permissions: {}
+    outputs:
+      host_image_tag: ${{ steps.host_image_tag.outputs.host_image_tag }}
     steps:
-      - name: Validate inputs
-        run: |
-          if [[ ${{ inputs.rocky9 }} == 'false' && ${{ inputs.ubuntu-noble }} == 'false' ]]; then
-            echo "At least one distribution must be selected"
-            exit 1
-          fi
-
-      - name: Install Package
-        uses: ConorMacBride/install-package@main
-        with:
-          apt: git unzip nodejs python3-pip python3-venv openssh-server openssh-client jq
-
-      - name: Start the SSH service
-        run: |
-          sudo /etc/init.d/ssh start
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -84,9 +70,40 @@ jobs:
         run: |
           echo "host_image_tag=$(date +${{ steps.openstack_release.outputs.openstack_release }}-%Y%m%dT%H%M%S)" >> $GITHUB_OUTPUT
 
+  overcloud-host-image-build:
+    name: Build overcloud host images
+    if: github.repository == 'stackhpc/stackhpc-kayobe-config'
+    environment: ${{ inputs.runner_env }}
+    runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
+    needs:
+      - runner-selection
+      - create-tag
+    permissions: {}
+    steps:
+      - name: Validate inputs
+        run: |
+          if [[ ${{ inputs.rocky9 }} == 'false' && ${{ inputs.ubuntu-noble }} == 'false' ]]; then
+            echo "At least one distribution must be selected"
+            exit 1
+          fi
+
       - name: Display overcloud host image tag
         run: |
-          echo "${{ steps.host_image_tag.outputs.host_image_tag }}"
+          echo "${{ needs.create-tag.outputs.host_image_tag }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: src/kayobe-config
+
+      - name: Install Package
+        uses: ConorMacBride/install-package@main
+        with:
+          apt: git unzip nodejs python3-pip python3-venv openssh-server openssh-client jq
+
+      - name: Start the SSH service
+        run: |
+          sudo /etc/init.d/ssh start
 
       - name: Install Kayobe
         run: |
