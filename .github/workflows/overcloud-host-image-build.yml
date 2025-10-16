@@ -60,6 +60,7 @@ jobs:
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
       - runner-selection
+      - validate-inputs
     permissions: {}
     outputs:
       host_image_tag: ${{ steps.host_image_tag.outputs.host_image_tag }}
@@ -92,8 +93,9 @@ jobs:
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
-      - runner-selection
       - create-tag
+      - runner-selection
+      - validate-inputs
     permissions: {}
     steps:
       - name: Display overcloud host image tag
@@ -355,8 +357,9 @@ jobs:
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
-      - runner-selection
       - create-tag
+      - runner-selection
+      - validate-inputs
     permissions: {}
     steps:
       - name: Display overcloud host image tag
@@ -618,8 +621,9 @@ jobs:
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
-      - runner-selection
       - create-tag
+      - runner-selection
+      - validate-inputs
     permissions: {}
     steps:
       - name: Display overcloud host image tag
@@ -881,8 +885,9 @@ jobs:
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
-      - runner-selection
       - create-tag
+      - runner-selection
+      - validate-inputs
     permissions: {}
     steps:
       - name: Display overcloud host image tag
