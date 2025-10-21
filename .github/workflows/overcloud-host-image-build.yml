@@ -89,7 +89,7 @@ jobs:
 
   overcloud-host-image-build-rocky:
     name: Build Rocky overcloud host images
-    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && ${{ inputs.rocky9 }} == 'true'
+    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && inputs.rocky9
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
@@ -353,7 +353,7 @@ jobs:
 
   overcloud-host-image-build-ubuntu:
     name: Build Ubuntu overcloud host images
-    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && ${{ inputs.ubuntu-noble }} == 'true'
+    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && inputs.ubuntu-noble
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
@@ -617,7 +617,7 @@ jobs:
 
   overcloud-host-image-build-rocky-arm64:
     name: Build Rocky ARM64 overcloud host images
-    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && ${{ inputs.rocky9 }} == 'true'
+    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && inputs.rocky9
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
@@ -881,7 +881,7 @@ jobs:
 
   overcloud-host-image-build-ubuntu-arm64:
     name: Build Ubuntu ARM64 overcloud host images
-    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && ${{ inputs.ubuntu-noble }} == 'true'
+    if: github.repository == 'stackhpc/stackhpc-kayobe-config' && inputs.ubuntu-noble
     environment: ${{ inputs.runner_env }}
     runs-on: ${{ needs.runner-selection.outputs.runner_name_image_build }}
     needs:
