@@ -332,8 +332,7 @@ jobs:
         run: |
           echo "Builds failed. See workflow artifacts for details." &&
           exit 1
-        if: steps.build_rocky_9.outcome == 'failure' ||
-            steps.build_ubuntu_noble.outcome == 'failure'
+        if: steps.build_rocky_9.outcome == 'failure'
 
       - name: Upload logs artifact
         uses: actions/upload-artifact@v4
@@ -596,8 +595,7 @@ jobs:
         run: |
           echo "Builds failed. See workflow artifacts for details." &&
           exit 1
-        if: steps.build_rocky_9.outcome == 'failure' ||
-            steps.build_ubuntu_noble.outcome == 'failure'
+        if: steps.build_ubuntu_noble.outcome == 'failure'
 
       - name: Upload logs artifact
         uses: actions/upload-artifact@v4
@@ -804,7 +802,7 @@ jobs:
           KAYOBE_VAULT_PASSWORD: ${{ secrets.KAYOBE_VAULT_PASSWORD }}
         if: steps.build_rocky_9_arm64.outcome == 'failure'
 
-      - name: Upload Rocky Linux 9 overcloud host image to Ark
+      - name: Upload Rocky Linux 9 ARM64 overcloud host image to Ark
         run: |
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
@@ -820,7 +818,7 @@ jobs:
           KAYOBE_VAULT_PASSWORD: ${{ secrets.KAYOBE_VAULT_PASSWORD }}
         if: inputs.rocky9 && steps.build_rocky_9_arm64.outcome == 'success'
 
-      - name: Upload Rocky Linux 9 overcloud host image to current Dev Cloud (SMS/Leafcloud)
+      - name: Upload Rocky Linux 9 ARM64 overcloud host image to current Dev Cloud (SMS/Leafcloud)
         run: |
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
@@ -834,7 +832,7 @@ jobs:
           OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
         if: inputs.rocky9 && steps.build_rocky_9_arm64.outcome == 'success'
 
-      - name: Upload Rocky Linux 9 overcloud host image to other Dev Cloud (Leafcloud/SMS)
+      - name: Upload Rocky Linux 9 ARM64 overcloud host image to other Dev Cloud (Leafcloud/SMS)
         run: |
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
@@ -860,8 +858,7 @@ jobs:
         run: |
           echo "Builds failed. See workflow artifacts for details." &&
           exit 1
-        if: steps.build_rocky_9_arm64.outcome == 'failure' ||
-            steps.build_ubuntu_noble_arm64.outcome == 'failure'
+        if: steps.build_rocky_9_arm64.outcome == 'failure'
 
       - name: Upload logs artifact
         uses: actions/upload-artifact@v4
@@ -1084,7 +1081,7 @@ jobs:
           KAYOBE_VAULT_PASSWORD: ${{ secrets.KAYOBE_VAULT_PASSWORD }}
         if: inputs.ubuntu-noble && steps.build_ubuntu_noble_arm64.outcome == 'success'
 
-      - name: Upload Ubuntu Noble overcloud host image to current Dev Cloud (SMS/Leafcloud)
+      - name: Upload Ubuntu Noble ARM64 overcloud host image to current Dev Cloud (SMS/Leafcloud)
         run: |
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
@@ -1098,7 +1095,7 @@ jobs:
           OS_APPLICATION_CREDENTIAL_SECRET: ${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}
         if: inputs.ubuntu-noble && steps.build_ubuntu_noble_arm64.outcome == 'success'
 
-      - name: Upload Ubuntu Noble overcloud host image to other Dev Cloud (Leafcloud/SMS)
+      - name: Upload Ubuntu Noble ARM64 overcloud host image to other Dev Cloud (Leafcloud/SMS)
         run: |
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
@@ -1124,8 +1121,7 @@ jobs:
         run: |
           echo "Builds failed. See workflow artifacts for details." &&
           exit 1
-        if: steps.build_rocky_9_arm64.outcome == 'failure' ||
-            steps.build_ubuntu_noble_arm64.outcome == 'failure'
+        if: steps.build_ubuntu_noble_arm64.outcome == 'failure'
 
       - name: Upload logs artifact
         uses: actions/upload-artifact@v4
