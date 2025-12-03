@@ -14,14 +14,14 @@
       args:
         executable: /bin/bash
 
-    - name: Run Generate mac addresses playbook
+    - name: Run Generate Mac Addresses playbook
       ansible.builtin.shell: |
           source "$VIRTUAL_ENV/bin/activate"
           kayobe playbook run "$KAYOBE_CONFIG_PATH/environments/stackhpc-sushy-baremetal/ansible/generate-mac-addresses.yml"
       args:
         executable: /bin/bash
 
-    - name: Run Create virtual baremetal playbook
+    - name: Run Create Virtual Baremetal playbook
       ansible.builtin.shell: |
           source "$VIRTUAL_ENV/bin/activate"
           kayobe playbook run "$KAYOBE_CONFIG_PATH/environments/stackhpc-sushy-baremetal/ansible/create-virtual-baremetal.yml"

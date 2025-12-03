@@ -47,8 +47,6 @@
           when:
             - bmnode.provision_state not in ["active", "available"]
 
-## flavor creation only seems to show in openstack flavor list when
-## is_public: true, deploy server still can't find flavor.
         - name: Create flavor for baremetal
           openstack.cloud.compute_flavor:
             state: present

@@ -32,12 +32,7 @@
   <os firmware='efi'>
     <type arch='x86_64' machine='pc-q35-rhel9.4.0'>hvm</type>
     <firmware>
-{% if bikolla_enable_secureboot %}
-      <feature enabled='yes' name='secure-boot'/>
-      <feature enabled='yes' name='enrolled-keys'/>
-{% else %}
       <feature enabled='no' name='secure-boot'/>
-{% endif %}
     </firmware>
   </os>
   <features>
