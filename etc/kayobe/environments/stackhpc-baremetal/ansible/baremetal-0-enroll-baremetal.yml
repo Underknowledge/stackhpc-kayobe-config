@@ -15,8 +15,8 @@
         virtualenv_command: "python3.{{ ansible_facts.python.version.minor }} -m venv"
         extra_args: "{% if pip_upper_constraints_file %}-c {{ pip_upper_constraints_file }}{% endif %}"
 
-- name: Ensure overcloud baremetal nodes are registered in ironic
-  hosts: baremetal-overcloud
+- name: Ensure baremetal nodes are registered in ironic
+  hosts: baremetal
   gather_facts: false
   max_fail_percentage: >-
     {{ baremetal_compute_register_max_fail_percentage |
@@ -61,13 +61,30 @@
             {{ venv }}/bin/openstack baremetal node create \
             --name {{ inventory_hostname }} \
             --driver {{ ironic_driver }} \
-            {% for key, value in ironic_driver_info.items() %}
-            --driver-info {{ key }}={{ value }} \
-            {% endfor %}
+            --driver-info
+            redfish_system_id={{ ironic_redfish_system_id }} \
+            redfish_address={{ ironic_redfish_address }} \
+            redfish_username={{ ironic_redfish_username }} \
+            redfish_password={{ ironic_redfish_password }} \
+            redfish_verify_ca={{ ironic_redfish_verify_ca }} \
             {% for key, value in ironic_properties.items() %}
             --property {{ key }}={{ value }} \
             {% endfor %}
             --resource-class {{ ironic_resource_class }}
+            {% if ironic_boot_interface %}
+            --boot_interface {{ ironic_boot_interface }}
+            {% endif %}
+            {% if ironic_inspect_interface %}
+            ----inspect-interface {{ ironic_inspect_interface }}
+            {% endif %}
+            {% if ironic_management_interface %}
+            --management-interface {{ ironic_management_interface }}
+            {% endif %}
+            {% if ironic_network_interface %}
+            --network-interface {{ ironic_network_interface }}
+            {% endif %}
+            {% if ironic_raid_interface %}
+            --raid-interface {{ ironic_raid_interface }}
         when:
           - node_show.rc != 0
 
