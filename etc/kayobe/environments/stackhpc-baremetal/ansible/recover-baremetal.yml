@@ -36,7 +36,7 @@
 
         - name: Check BMC back up again
           ansible.builtin.uri:
-            url: "https://{{ ironic_driver_info['redfish_address'] }}"
+            url: "{{ ironic_redfish_address + '/redfish/v1' }}"
             method: GET
             status_code: 200
             validate_certs: false
