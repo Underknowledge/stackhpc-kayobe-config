@@ -74,7 +74,7 @@
             --boot_interface {{ ironic_boot_interface }}
             {% endif %}
             {% if ironic_inspect_interface %}
-            ----inspect-interface {{ ironic_inspect_interface }}
+            --inspect-interface {{ ironic_inspect_interface }}
             {% endif %}
             {% if ironic_management_interface %}
             --management-interface {{ ironic_management_interface }}
