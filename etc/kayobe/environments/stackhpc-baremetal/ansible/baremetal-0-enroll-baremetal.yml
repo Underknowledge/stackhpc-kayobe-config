@@ -34,7 +34,7 @@
       ansible.builtin.assert:
         that:
           - ironic_driver is defined
-          - ironic_driver_info is defined
+          - ironic_redfish_address is defined
           - ironic_properties is defined
           - ironic_resource_class is defined
         fail_msg: One or more Ironic variables are undefined.
@@ -63,27 +63,31 @@
               --driver {{ ironic_driver }} \
               --driver-info redfish_system_id={{ ironic_redfish_system_id }} \
               --driver-info redfish_address={{ ironic_redfish_address }} \
+              {% if ironic_redfish_username %}
               --driver-info redfish_username={{ ironic_redfish_username }} \
+              {% endif %}
+              {% if ironic_redfish_password %}
               --driver-info redfish_password={{ ironic_redfish_password }} \
+              {% endif %}
               --driver-info redfish_verify_ca={{ ironic_redfish_verify_ca }} \
               {% for key, value in ironic_properties.items() %}
               --property {{ key }}={{ value }} \
               {% endfor %}
-              --resource-class {{ ironic_resource_class }}
+              --resource-class {{ ironic_resource_class }} \
               {% if ironic_boot_interface %}
-              --boot-interface {{ ironic_boot_interface }}
+              --boot-interface {{ ironic_boot_interface }} \
               {% endif %}
               {% if ironic_inspect_interface %}
-              --inspect-interface {{ ironic_inspect_interface }}
+              --inspect-interface {{ ironic_inspect_interface }} \
               {% endif %}
               {% if ironic_management_interface %}
-              --management-interface {{ ironic_management_interface }}
+              --management-interface {{ ironic_management_interface }} \
               {% endif %}
               {% if ironic_network_interface %}
-              --network-interface {{ ironic_network_interface }}
+              --network-interface {{ ironic_network_interface }} \
               {% endif %}
               {% if ironic_raid_interface %}
-              --raid-interface {{ ironic_raid_interface }}
+              --raid-interface {{ ironic_raid_interface }} \
               {% endif %}
           when:
             - node_show.rc != 0

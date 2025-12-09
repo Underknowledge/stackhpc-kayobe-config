@@ -18,7 +18,7 @@
       ansible.builtin.assert:
         that:
           - ironic_driver is defined
-          - ironic_driver_info is defined
+          - ironic_redfish_address is defined
           - ironic_properties is defined
           - ironic_resource_class is defined
         fail_msg: One or more Ironic variables are undefined.
@@ -52,7 +52,7 @@
 
         - name: Check BMC is up
           ansible.builtin.uri:
-            url: "{{ ironic_driver_info['redfish_address'] + '/redfish/v1' }}"
+            url: "{{ ironic_redfish_address + '/redfish/v1' }}"
             method: GET
             status_code: 200
             validate_certs: false
@@ -71,7 +71,7 @@
 
         - name: Check BMC back up again
           ansible.builtin.uri:
-            url: "{{ ironic_driver_info['redfish_address'] }}/redfish/v1"
+            url: "{{ ironic_redfish_address + '/redfish/v1' }}"
             method: GET
             status_code: 200
             validate_certs: false
