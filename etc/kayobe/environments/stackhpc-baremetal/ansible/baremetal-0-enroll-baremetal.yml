@@ -71,7 +71,7 @@
             {% endfor %}
             --resource-class {{ ironic_resource_class }}
             {% if ironic_boot_interface %}
-            --boot_interface {{ ironic_boot_interface }}
+            --boot-interface {{ ironic_boot_interface }}
             {% endif %}
             {% if ironic_inspect_interface %}
             --inspect-interface {{ ironic_inspect_interface }}
