@@ -79,7 +79,7 @@
           register: uri_output
           until: uri_output.status == 200
           delay: 2
-          retries: 5 # Retries for 5 * 2 seconds = 10 seconds
+          retries: 5  # Retries for 5 * 2 seconds = 10 seconds
 
         - name: Note when we are able to reach the bmc, the first time
           ansible.builtin.command:

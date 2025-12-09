@@ -3,7 +3,7 @@
 # Ironic configuration.
 
 # Specify the list of hardware types to load during service initialization.
-kolla_ironic_enabled_hardware_types: 
+kolla_ironic_enabled_hardware_types:
   - redfish
 
 # Specify the list of bios interfaces to load during service initialization.
@@ -65,7 +65,7 @@ kolla_ironic_enabled_network_interfaces:
 kolla_ironic_default_network_interface: neutron
 
 # Specify the list of power interfaces to load during service initialization.
-kolla_ironic_enabled_power_interfaces: 
+kolla_ironic_enabled_power_interfaces:
   - redfish
 
 # Default power interface to be used for nodes that do not have power_interface

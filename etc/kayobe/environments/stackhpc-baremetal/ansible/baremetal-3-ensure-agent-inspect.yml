@@ -20,7 +20,7 @@
         # NOTE: Without this, the controller's ansible_host variable will not
         # be respected when using delegate_to.
         ansible_host: "{{ hostvars[controller_host].ansible_host | default(controller_host) }}"
-        agent_inspect_timeout: "{{ 60 * 20 }}" # 20 minutes
+        agent_inspect_timeout: "{{ 60 * 20 }}"  # 20 minutes
       environment: "{{ openstack_auth_env }}"
       block:
 

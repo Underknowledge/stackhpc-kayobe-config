@@ -1,7 +1,7 @@
 ---
 
 - name: Register baremetal compute nodes
-  hosts:  "{{ groups['controllers'][0] }}"
+  hosts: "{{ groups['controllers'][0] }}"
   vars:
     venv: "{{ virtualenv_path }}/openstack-cli"
   tasks:
@@ -40,59 +40,59 @@
         fail_msg: One or more Ironic variables are undefined.
 
     - block:
-      - name: Show baremetal node
-        ansible.builtin.command:
-          cmd: "{{ venv }}/bin/openstack baremetal node show {{ inventory_hostname }}"
-        register: node_show
-        failed_when:
-          - '"HTTP 404" not in node_show.stderr'
-          - node_show.rc != 0
-        changed_when: false
+        - name: Show baremetal node
+          ansible.builtin.command:
+            cmd: "{{ venv }}/bin/openstack baremetal node show {{ inventory_hostname }}"
+          register: node_show
+          failed_when:
+            - '"HTTP 404" not in node_show.stderr'
+            - node_show.rc != 0
+          changed_when: false
 
-      # NOTE: The openstack.cloud.baremetal_node module cannot be used in this
-      # script due to requiring a MAC address pre-defined, instead, this should
-      # be discovered by inpsection following this script.
-      #
-      # NOTE: IPMI address must be passed with Redfish address to ensure existing
-      # Ironic nodes match with new nodes during inspection.
-      - name: Create baremetal nodes
-        ansible.builtin.shell:
-          cmd: |
-            {{ venv }}/bin/openstack baremetal node create \
-            --name {{ inventory_hostname }} \
-            --driver {{ ironic_driver }} \
-            --driver-info redfish_system_id={{ ironic_redfish_system_id }} \
-            --driver-info redfish_address={{ ironic_redfish_address }} \
-            --driver-info redfish_username={{ ironic_redfish_username }} \
-            --driver-info redfish_password={{ ironic_redfish_password }} \
-            --driver-info redfish_verify_ca={{ ironic_redfish_verify_ca }} \
-            {% for key, value in ironic_properties.items() %}
-            --property {{ key }}={{ value }} \
-            {% endfor %}
-            --resource-class {{ ironic_resource_class }}
-            {% if ironic_boot_interface %}
-            --boot-interface {{ ironic_boot_interface }}
-            {% endif %}
-            {% if ironic_inspect_interface %}
-            --inspect-interface {{ ironic_inspect_interface }}
-            {% endif %}
-            {% if ironic_management_interface %}
-            --management-interface {{ ironic_management_interface }}
-            {% endif %}
-            {% if ironic_network_interface %}
-            --network-interface {{ ironic_network_interface }}
-            {% endif %}
-            {% if ironic_raid_interface %}
-            --raid-interface {{ ironic_raid_interface }}
-            {% endif %}
-        when:
-          - node_show.rc != 0
+        # NOTE: The openstack.cloud.baremetal_node module cannot be used in this
+        # script due to requiring a MAC address pre-defined, instead, this should
+        # be discovered by inpsection following this script.
+        #
+        # NOTE: IPMI address must be passed with Redfish address to ensure existing
+        # Ironic nodes match with new nodes during inspection.
+        - name: Create baremetal nodes
+          ansible.builtin.shell:
+            cmd: |
+              {{ venv }}/bin/openstack baremetal node create \
+              --name {{ inventory_hostname }} \
+              --driver {{ ironic_driver }} \
+              --driver-info redfish_system_id={{ ironic_redfish_system_id }} \
+              --driver-info redfish_address={{ ironic_redfish_address }} \
+              --driver-info redfish_username={{ ironic_redfish_username }} \
+              --driver-info redfish_password={{ ironic_redfish_password }} \
+              --driver-info redfish_verify_ca={{ ironic_redfish_verify_ca }} \
+              {% for key, value in ironic_properties.items() %}
+              --property {{ key }}={{ value }} \
+              {% endfor %}
+              --resource-class {{ ironic_resource_class }}
+              {% if ironic_boot_interface %}
+              --boot-interface {{ ironic_boot_interface }}
+              {% endif %}
+              {% if ironic_inspect_interface %}
+              --inspect-interface {{ ironic_inspect_interface }}
+              {% endif %}
+              {% if ironic_management_interface %}
+              --management-interface {{ ironic_management_interface }}
+              {% endif %}
+              {% if ironic_network_interface %}
+              --network-interface {{ ironic_network_interface }}
+              {% endif %}
+              {% if ironic_raid_interface %}
+              --raid-interface {{ ironic_raid_interface }}
+              {% endif %}
+          when:
+            - node_show.rc != 0
 
-      - name: Manage baremetal nodes
-        ansible.builtin.command:
-          cmd: "{{ venv }}/bin/openstack baremetal node manage {{ inventory_hostname }} --wait"
-        when:
-          - node_show.rc != 0
+        - name: Manage baremetal nodes
+          ansible.builtin.command:
+            cmd: "{{ venv }}/bin/openstack baremetal node manage {{ inventory_hostname }} --wait"
+          when:
+            - node_show.rc != 0
       delegate_to: "{{ controller_host }}"
       vars:
         # NOTE: Without this, the controller's ansible_host variable will not
