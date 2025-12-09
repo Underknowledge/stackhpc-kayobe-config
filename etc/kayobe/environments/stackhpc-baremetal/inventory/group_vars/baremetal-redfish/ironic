@@ -21,8 +21,8 @@ ironic_provision_flavor: "example_resource_class"
 ironic_provision_image: "overcloud-rocky-9-2025.1-20250930T144255"
 ironic_provision_key_name: "stack"
 #new variables for baremetal-0
-ironic_boot_interface: redfish-virtual-media
-ironic_inspect_interface: redfish
-ironic_management_interface: redfish
-ironic_network_interface: neutron
-ironic_raid_interface: agent
+ironic_boot_interface: "redfish-virtual-media"
+ironic_inspect_interface: "redfish"
+ironic_management_interface: "redfish"
+ironic_network_interface: "neutron"
+ironic_raid_interface: "agent"

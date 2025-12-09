@@ -61,12 +61,11 @@
             {{ venv }}/bin/openstack baremetal node create \
             --name {{ inventory_hostname }} \
             --driver {{ ironic_driver }} \
-            --driver-info
-            redfish_system_id={{ ironic_redfish_system_id }} \
-            redfish_address={{ ironic_redfish_address }} \
-            redfish_username={{ ironic_redfish_username }} \
-            redfish_password={{ ironic_redfish_password }} \
-            redfish_verify_ca={{ ironic_redfish_verify_ca }} \
+            --driver-info redfish_system_id={{ ironic_redfish_system_id }} \
+            --driver-info redfish_address={{ ironic_redfish_address }} \
+            --driver-info redfish_username={{ ironic_redfish_username }} \
+            --driver-info redfish_password={{ ironic_redfish_password }} \
+            --driver-info redfish_verify_ca={{ ironic_redfish_verify_ca }} \
             {% for key, value in ironic_properties.items() %}
             --property {{ key }}={{ value }} \
             {% endfor %}
@@ -85,6 +84,7 @@
             {% endif %}
             {% if ironic_raid_interface %}
             --raid-interface {{ ironic_raid_interface }}
+            {% endif %}
         when:
           - node_show.rc != 0
 
