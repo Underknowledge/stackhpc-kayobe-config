@@ -50,3 +50,15 @@
             autostart: false
             boot_firmware: uefi
       delegate_to: localhost
+
+    - name: Discover Virtual Baremetal UUID
+      ansible.builtin.command:
+        cmd: "sudo virsh domuuid {{ inventory_hostname }}"
+      register: sushy_uuid
+      failed_when:
+        - sushy_uuid.rc != 0
+      changed_when: false
+
+    - name: Set uuid fact
+      ansible.builtin.set_fact:
+        uuid: "{{ sushy_uuid.stdout }}"
