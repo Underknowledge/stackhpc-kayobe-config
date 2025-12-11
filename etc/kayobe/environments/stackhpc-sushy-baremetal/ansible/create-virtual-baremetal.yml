@@ -37,7 +37,9 @@
         libvirt_vms:
           - state: present
             name: "{{ inventory_hostname }}"
-            xml_file: "{{ sushy_directory }}/vbmc-node.xml.j2"
+            memory_mb: '4657'
+            vcpus: '2'
+            # xml_file: "{{ sushy_directory }}/vbmc-node.xml.j2"
             volumes:
               - name: '{{ inventory_hostname }}.qcow2'
                 device: 'disk'
@@ -52,13 +54,24 @@
       delegate_to: localhost
 
     - name: Discover Virtual Baremetal UUID
-      ansible.builtin.command:
-        cmd: "sudo virsh domuuid {{ inventory_hostname }}"
-      register: sushy_uuid
-      failed_when:
-        - sushy_uuid.rc != 0
-      changed_when: false
+      ansible.builtin.command: "virsh domuuid {{ inventory_hostname }}"
+      register: vm_uuid_result
+      delegate_to: localhost
 
-    - name: Set uuid fact
+    - name: Persist UUID fact
       ansible.builtin.set_fact:
-        uuid: "{{ sushy_uuid.stdout }}"
+        uuid: "{{ vm_uuid_result.stdout }}"
+      delegate_to: "{{ inventory_hostname }}"
+      delegate_facts: true
+
+    - name: Ensure host_vars directory exists
+      ansible.builtin.file:
+        path: "{{ inventory_dir }}/host_vars/{{ inventory_hostname }}"
+        state: directory
+      delegate_to: localhost
+
+    - name: Write UUID to host_vars
+      ansible.builtin.copy:
+        dest: "{{ inventory_dir }}/host_vars/{{ inventory_hostname }}/uuid.yml"
+        content: "uuid: {{ vm_uuid_result.stdout }}\n"
+      delegate_to: localhost
