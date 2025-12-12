@@ -37,17 +37,24 @@
         libvirt_vms:
           - state: present
             name: "{{ inventory_hostname }}"
-            memory_mb: '4657'
+            uuid: "{{ uuid }}"
+            memory_mb: '4660'
             vcpus: '2'
+            cpu_mode: 'host-model'
             # xml_file: "{{ sushy_directory }}/vbmc-node.xml.j2"
             volumes:
               - name: '{{ inventory_hostname }}.qcow2'
                 device: 'disk'
                 format: 'qcow2'
-                capacity: '20GB'
+                # capacity: '20GB'
                 pool: 'default'
+                file_path: '/var/lib/libvirt/images/{{ inventory_hostname }}.qcow2'
+                type: 'file'
             interfaces:
-              - network: 'breth1'
+              - network: 'default'
+                source:
+                  dev: 'breth1'
+                  mode: 'bridge'
             start: false
             autostart: false
             boot_firmware: uefi
