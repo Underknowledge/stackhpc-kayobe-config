@@ -58,16 +58,16 @@
             validate_certs: false
             timeout: 10
 
-        #TODO(ClaudiaWatson): add an optional BMC reboot into the flow
-        - name: Reboot BMC
-          community.general.redfish_command:
-            category: Manager
-            command: PowerReboot
-            username: "{{ ironic_redfish_username }}"
-            password: "{{ ironic_redfish_password }}"
-          when:
-            - kayobe_bmc_up == ""
-            - ironic_redfish_username is defined
+        # #TODO(ClaudiaWatson): add an optional BMC reboot into the flow
+        # - name: Reboot BMC
+        #   community.general.redfish_command:
+        #     category: Manager
+        #     command: PowerReboot
+        #     username: "{{ ironic_redfish_username }}"
+        #     password: "{{ ironic_redfish_password }}"
+        #   when:
+        #     - kayobe_bmc_up == ""
+        #     - ironic_redfish_username is defined
 
         - name: Check BMC back up again
           ansible.builtin.uri:
