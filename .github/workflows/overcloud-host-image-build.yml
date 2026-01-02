@@ -253,7 +253,7 @@ jobs:
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
           kayobe playbook run \
-          src/kayobe-config/etc/kayobe/ansible/pulp/pulp-artifact-upload.yml \
+          src/kayobe-config/etc/kayobe/ansible/pulp/pulp-artifact-upload.yml -vvvvv \
           -e artifact_path=/opt/kayobe/images/overcloud-rocky-9 \
           -e artifact_tag=${{ steps.host_image_tag.outputs.host_image_tag }} \
           -e artifact_type="kayobe-images" \
@@ -321,7 +321,7 @@ jobs:
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-builder &&
           kayobe playbook run \
-          src/kayobe-config/etc/kayobe/ansible/pulp/pulp-artifact-upload.yml \
+          src/kayobe-config/etc/kayobe/ansible/pulp/pulp-artifact-upload.yml -vvvvv \
           -e artifact_path=/opt/kayobe/images/overcloud-ubuntu-noble \
           -e artifact_tag=${{ steps.host_image_tag.outputs.host_image_tag }} \
           -e artifact_type="kayobe-images" \
