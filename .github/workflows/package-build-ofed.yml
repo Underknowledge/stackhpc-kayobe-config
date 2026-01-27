@@ -97,10 +97,12 @@ jobs:
           aio_vm_network = "stackhpc-ci"
           aio_vm_subnet = "stackhpc-ci"
           aio_vm_interface = "ens3"
+          aio_vm_tags = ${{ env.VM_TAGS }}
           EOF
         working-directory: ${{ github.workspace }}/src/kayobe-config/terraform/aio
         env:
           VM_IMAGE: ${{ steps.image_name.outputs.image_name }}
+          VM_TAGS: '["skc-ci-doca-builder", "PR=${{ github.event.number }}"]'
 
       - name: Terraform Plan
         run: terraform plan
@@ -233,7 +235,7 @@ jobs:
         run: |
           source venvs/kayobe/bin/activate &&
           source src/kayobe-config/kayobe-env --environment ci-doca-builder &&
-          kayobe playbook run src/kayobe-config/etc/kayobe/ansible/push-ofed.yml \
+          kayobe playbook run src/kayobe-config/etc/kayobe/ansible/tools/push-ofed.yml \
           -e "ofed_tag=${{ steps.ofed_tag.outputs.ofed_tag }}"
         env:
           KAYOBE_VAULT_PASSWORD: ${{ secrets.KAYOBE_VAULT_PASSWORD }}

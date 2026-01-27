@@ -85,7 +85,7 @@ kolla_base_distro_and_version: "{{ kolla_base_distro }}-{{ kolla_base_distro_ver
 # case Quay.io will be used.
 #kolla_docker_registry:
 
-# Docker namespace to use for Kolla images. Default is 'kolla'.
+# Docker namespace to use for Kolla images. Default is 'openstack.kolla'.
 kolla_docker_namespace: stackhpc
 
 # Username to use to access a docker registry. Default is not set, in which
@@ -135,9 +135,9 @@ kolla_sources:
     type: git
     location: https://github.com/stackhpc/stackhpc-inspector-plugins.git
     reference: 1.3.0
-  keystone-base:
+  neutron-base-plugin-networking-generic-switch:
     type: git
-    location: https://github.com/stackhpc/keystone.git
+    location: https://github.com/stackhpc/networking-generic-switch.git
     reference: stackhpc/{{ openstack_release }}
   neutron-server-plugin-networking-mlnx:
     type: git
@@ -504,22 +504,8 @@ kolla_build_args: {}
 #         kolla-ansible group.
 # NOTE(Alex-Welsh): If you want to extend the map rather than replace it, you
 # must include the Kayobe defaults in the mapping.
-# Standard Kayobe defaults:
-#  compute:
-#    groups:
-#      - "compute"
-#  control:
-#    groups:
-#      - "controllers"
-#  monitoring:
-#    groups:
-#      - "controllers"
-#  network:
-#    groups:
-#      - "controllers"
-#  storage:
-#    groups:
-#      - "controllers"
+# The standard Kayobe defaults can be found here:
+# https://github.com/stackhpc/kayobe/blob/stackhpc/<release>/ansible/inventory/group_vars/all/kolla
 #kolla_overcloud_inventory_top_level_group_map:
 
 # List of names of top level kolla-ansible groups. Any of these groups which
